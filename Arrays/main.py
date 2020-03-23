@@ -46,10 +46,51 @@ def string_to_int(str):
         digit *= 10
         digit += (ord(chr) - ord('0'))
 
-    return  -digit if is_negative else digit
+    return -digit if is_negative else digit
+
+
+# Một số ứng dụng yêu cầu số học chính xác tùy ý.
+# Một cách để đạt được điều này là sử dụng các mảng để biểu diễn các số nguyên, 
+# ví dụ: với một chữ số trên mỗi mục nhập với chữ số có ý nghĩa nhất xuất hiện đầu tiên và một chữ số hàng đầu âm biểu thị một số nguyên âm.
+# Ví dụ: (1,9,3,7,0,7,7,2,1) đại diện cho 193707721 và (-7,6,1,8,3,8,2,5,7,2,8,7) đại diện cho -761838257287.
+
+
+def array_to_digit(array):
+    digit = array[0] * 10 ** (len(array) - 1)
+    is_negative = False
+    if array[0] < 0:
+        is_negative = True
+    for i in range(1, len(array)):
+        if is_negative:
+            digit += (-1) * 10 ** (len(array) - i - 1) * array[i]
+        else:
+            digit += 10 ** (len(array) - i - 1) * array[i]
+    return digit
+
+
+
+# Vấn đề này liên quan đến vấn đề mua và bán cổ phiếu một cách tối ưu một lần, như được mô tả trên Trang 2.
+# Ví dụ, hãy xem xét trình tự sau của giá cổ phiếu (310.315.275.295.260.270.290.230.255.250).
+# Lợi nhuận tối đa có thể được thực hiện với một lần mua và một lần bán là 30 --- mua ở mức 260 và bán ở mức 290.
+# Lưu ý rằng 250 không phải là giá thấp nhất, cũng không phải là 290 giá cao nhất.
+# Viết chương trình lấy một mảng biểu thị giá cổ phiếu hàng ngày và lấy lại lợi nhuận tối đa có thể kiếm được bằng cách mua và sau đó bán một cổ phiếu của cổ phiếu đó. Không cần phải mua nếu không có lợi nhuận.
+
+
+import math
+
+
+def buy_and_sell_stock_once(prices):
+    min_price_so_far, max_profit = math.inf, 0.0
+    for price in prices:
+        max_profit_sell_today = price - min_price_so_far
+        max_profit = max(max_profit, max_profit_sell_today)
+        min_price_so_far = min(min_price_so_far, price)
+    return max_profit
+
 
 def main():
-    print(string_to_int("-123"))
+    print(buy_and_sell_stock_once([1, 2, 3, 4]))
+
 
 if __name__ == '__main__':
     main()
